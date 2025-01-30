@@ -71,22 +71,9 @@ async function showDashboard(user) {
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    // Check if user is admin
-    if (user.email === 'njavaa77@gmail.com') {
-      showAdminDashboard();
-    } else {
-      showDashboard(user);
-    }
+    showDashboard(user);
   } else {
     document.getElementById("user-dashboard").style.display = "none";
     document.getElementById("auth-form").style.display = "block";
   }
 });
-
-function showAdminDashboard() {
-  document.getElementById("auth-form").style.display = "none";
-  document.getElementById("user-dashboard").style.display = "block";
-  // ... (Add admin-specific dashboard elements here)
-}
-
-// ... (Add other features here - deposit, withdraw, etc.)
