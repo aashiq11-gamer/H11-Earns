@@ -12,21 +12,25 @@
     <form id="signup-form">
       <input type="email" id="email" placeholder="Email">
       <input type="password" id="password" placeholder="Password">
-      <button type="button" onclick="signUp()">Sign Up</button> </form>
+      <button type="button" onclick="signUp()">Sign Up</button>
+    </form>
 
     <h2>Log In</h2>
     <form id="login-form">
       <input type="email" id="login-email" placeholder="Email">
       <input type="password" id="login-password" placeholder="Password">
-      <button type="button" onclick="logIn()">Log In</button> </form>
+      <button type="button" onclick="logIn()">Log In</button>
+    </form>
   </div>
 
   <div id="user-dashboard" style="display: none;">
     <h2>User Dashboard</h2>
     <p>Welcome, <span id="user-name"></span>!</p>
+    <p>Balance: <span id="balance"></span></p>
+    <p>Earnings: <span id="earnings"></span></p>
     <button onclick="logOut()">Log Out</button>
   </div>
 
-<script src="script.js" type="module"></script>
+  <script src="script.js" type="module"></script>
 </body>
 </html>
