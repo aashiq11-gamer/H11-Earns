@@ -1,7 +1,7 @@
 // Firebase imports
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js';
-import { firebaseConfig } from './firebase-config.js'; // Ensure the path is correct
+import { firebaseConfig } from './firebase-config.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -20,7 +20,7 @@ onAuthStateChanged(auth, user => {
 });
 
 // Sign Up Function
-const signUp = () => {
+window.signUp = () => {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
@@ -36,7 +36,7 @@ const signUp = () => {
 };
 
 // Log In Function
-const logIn = () => {
+window.logIn = () => {
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
 
@@ -52,7 +52,7 @@ const logIn = () => {
 };
 
 // Log Out Function
-const logOut = () => {
+window.logOut = () => {
   signOut(auth)
     .then(() => {
       console.log("User logged out");
