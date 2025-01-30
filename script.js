@@ -1,7 +1,7 @@
 // Firebase imports
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js';
-import { firebaseConfig } from './firebase-config.js'; // Make sure this is the correct path
+import { firebaseConfig } from './firebase-config.js'; // Ensure the path is correct
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
