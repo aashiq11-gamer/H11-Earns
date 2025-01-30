@@ -1,9 +1,12 @@
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js';
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 // Listen for auth state changes
-auth.onAuthStateChanged(user => {
+onAuthStateChanged(auth, user => {
   if (user) {
     // User is signed in
     console.log("User is signed in:", user);
@@ -21,7 +24,7 @@ const signUp = () => {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
-  auth.createUserWithEmailAndPassword(email, password)
+  createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Successfully Signed Up
       console.log("User signed up:", userCredential.user);
@@ -39,7 +42,7 @@ const logIn = () => {
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
 
-  auth.signInWithEmailAndPassword(email, password)
+  signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Successfully Logged In
       console.log("User logged in:", userCredential.user);
@@ -53,7 +56,7 @@ const logIn = () => {
 
 // Log Out Function
 const logOut = () => {
-  auth.signOut()
+  signOut(auth)
     .then(() => {
       console.log("User logged out");
       document.getElementById("user-dashboard").style.display = "none";
