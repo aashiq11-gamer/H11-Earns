@@ -14,7 +14,7 @@ onAuthStateChanged(auth, user => {
   if (user) {
     console.log("User is signed in:", user);
     if (user.email === 'admin@example.com') { // Check if the logged-in user is admin
-      window.location.href = 'admin-dashboard.html'; // Redirect to admin dashboard
+      showAdminDashboard(user); // Load admin dashboard
     } else {
       showDashboard(user);
     }
@@ -34,7 +34,7 @@ window.signUp = async () => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     console.log("User signed up:", userCredential.user);
     if (userCredential.user.email === 'admin@example.com') {
-      window.location.href = 'admin-dashboard.html';
+      showAdminDashboard(userCredential.user); // Load admin dashboard
     } else {
       // Give signup bonus of 25 PKR
       await addDoc(collection(db, 'users'), {
@@ -61,7 +61,7 @@ window.logIn = async () => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     console.log("User logged in:", userCredential.user);
     if (userCredential.user.email === 'admin@example.com') {
-      window.location.href = 'admin-dashboard.html';
+      showAdminDashboard(userCredential.user); // Load admin dashboard
     } else {
       showDashboard(userCredential.user);
     }
@@ -98,6 +98,15 @@ const showDashboard = async (user) => {
   });
 };
 
+// Show Admin Dashboard
+const showAdminDashboard = (user) => {
+  document.getElementById("auth-form").style.display = "none";
+  document.getElementById("user-dashboard").style.display = "block";
+
+  document.getElementById("balance").innerText = "Admin: Unlimited Access";
+  document.getElementById("earnings").innerText = "Admin: Unlimited Access";
+};
+
 // Withdraw Function
 window.withdraw = async () => {
   const user = auth.currentUser;
@@ -111,16 +120,42 @@ window.withdraw = async () => {
       docId = doc.id;
     });
 
-    if (userData.balance >= 25) {
-      // Update balance and record withdrawal request
-      await updateDoc(doc(db, 'users', docId), {
-        balance: userData.balance - 25,
-        withdrawalRequest: true
-      });
-      alert('Withdrawal request submitted');
+    if (user.email === 'admin@example.com') {
+      alert('Admin cannot withdraw.');
     } else {
-      alert('Minimum withdrawal amount is 25 PKR');
+      if (userData.balance >= 25) {
+        // Update balance and record withdrawal request
+        await updateDoc(doc(db, 'users', docId), {
+          balance: userData.balance - 25,
+          withdrawalRequest: true
+        });
+        alert('Withdrawal request submitted');
+      } else {
+        alert('Minimum withdrawal amount is 25 PKR');
+      }
     }
+  }
+};
+
+// Deposit Function
+window.deposit = async (amount) => {
+  const user = auth.currentUser;
+  if (user && amount >= 100) {
+    const q = query(collection(db, 'users'), where("uid", "==", user.uid));
+    const querySnapshot = await getDocs(q);
+    let docId = '';
+    querySnapshot.forEach((doc) => {
+      docId = doc.id;
+    });
+
+    await updateDoc(doc(db, 'users', docId), {
+      deposit: amount,
+      balance: firebase.firestore.FieldValue.increment(amount)
+    });
+    alert('Deposit successful');
+    showDashboard(user);
+  } else {
+    alert('Minimum deposit amount is 100 PKR');
   }
 };
 
@@ -137,16 +172,20 @@ window.viewAd = async () => {
       docId = doc.id;
     });
 
-    if (userData.adViews < 5) {
-      // Update earnings and ad views count
-      await updateDoc(doc(db, 'users', docId), {
-        earnings: userData.earnings + 0.50,
-        adViews: (userData.adViews || 0) + 1
-      });
-      alert('Ad viewed. Earnings updated.');
-      showDashboard(user);
+    if (user.email === 'admin@example.com') {
+      alert('Admin: Ad viewed. Earnings updated.');
     } else {
-      alert('Maximum ad views reached for today.');
+      if (userData.adViews < 5) {
+        // Update earnings and ad views count
+        await updateDoc(doc(db, 'users', docId), {
+          earnings: userData.earnings + 0.50,
+          adViews: (userData.adViews || 0) + 1
+        });
+        alert('Ad viewed. Earnings updated.');
+        showDashboard(user);
+      } else {
+        alert('Maximum ad views reached for today.');
+      }
     }
   }
 };
@@ -161,7 +200,19 @@ const addBonus = async (userId, amount) => {
   });
 
   await updateDoc(doc(db, 'users', docId), {
-    balance: amount
+    balance: firebase.firestore.FieldValue.increment(amount)
   });
   console.log(`Added ${amount} PKR bonus to user ${userId}`);
 };
+
+// Firebase Function to add daily profit
+export const dailyProfit = functions.pubsub.schedule('0 0 * * *').onRun(async (context) => {
+  const snapshot = await getDocs(collection(db, 'users'));
+  snapshot.forEach(async (doc) => {
+    const user = doc.data();
+    const profit = user.balance * 0.07; // Daily 7% profit
+    await updateDoc(doc.ref, {
+      balance: firebase.firestore.FieldValue.increment(profit)
+    });
+  });
+});
