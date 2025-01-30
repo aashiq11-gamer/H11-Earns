@@ -1,29 +1,27 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    text-align: center;
-    padding: 50px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 20px;
 }
 
-#game-container {
-    margin-top: 50px;
+h1, h2 {
+  color: #333;
+}
+
+#auth-form input {
+  margin: 10px;
+  padding: 10px;
+  width: 200px;
 }
 
 button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 15px 32px;
-    margin: 20px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 8px;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 
 button:hover {
-    background-color: #45a049;
-}
-
-#auth-container, #game-actions, #admin-actions {
-    display: none;
+  background-color: #0056b3;
 }
