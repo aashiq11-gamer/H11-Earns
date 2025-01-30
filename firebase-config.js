@@ -1,5 +1,5 @@
 // Firebase Configuration (Your provided Firebase config)
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyBaqypWY8YWiT5fvse-lllrkhUSpYR1JQ8",
   authDomain: "h11-earnings.firebaseapp.com",
   databaseURL: "https://h11-earnings-default-rtdb.firebaseio.com",
