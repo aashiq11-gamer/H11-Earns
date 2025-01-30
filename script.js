@@ -20,8 +20,8 @@ const signUp = () => {
 
 // Log In Function
 const logIn = () => {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
 
   auth.signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
