@@ -1,34 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>H11 Earns</title>
-    <link rel="stylesheet" href="styles.css">
+  <title>H11 Earns</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Welcome to H11 Earns</h1>
+  <h1>Welcome to H11 Earns</h1>
 
-    <div id="auth-form">  <h2>Sign Up</h2>
-        <form id="signup-form">
-            <input type="email" id="email" placeholder="Email">
-            <input type="password" id="password" placeholder="Password">
-            <button type="button" onclick="signUp()">Sign Up</button>
-        </form>
+  <div id="auth-form">
+    <h2>Sign Up</h2>
+    <form id="signup-form">
+      <input type="email" id="email" placeholder="Email">
+      <input type="password" id="password" placeholder="Password">
+      <button type="button" onclick="signUp()">Sign Up</button> </form>
 
-        <h2>Log In</h2>
-        <form id="login-form">
-            <input type="email" id="login-email" placeholder="Email">
-            <input type="password" id="login-password" placeholder="Password">
-            <button type="button" onclick="logIn()">Log In</button>
-        </form>
-    </div>
+    <h2>Log In</h2>
+    <form id="login-form">
+      <input type="email" id="login-email" placeholder="Email">
+      <input type="password" id="login-password" placeholder="Password">
+      <button type="button" onclick="logIn()">Log In</button> </form>
+  </div>
 
-    <div id="user-dashboard" style="display: none;">
-        <h2>User Dashboard</h2>
-        <p>Welcome, <span id="user-name"></span>!</p>
-        <button onclick="logOut()">Log Out</button>
-    </div>
+  <div id="user-dashboard" style="display: none;">
+    <h2>User Dashboard</h2>
+    <p>Welcome, <span id="user-name"></span>!</p>
+    <button onclick="logOut()">Log Out</button>
+  </div>
 
-    <script src="script.js"></script> </body>
+<script src="script.js" type="module"></script>
+</body>
 </html>
