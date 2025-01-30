@@ -5,5 +5,44 @@ import { firebaseConfig } from './firebase-config.js';
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const approveDeposit = async () => {
-[_{{{CITATION{{{_1{](https://github.com/Unique111/writings/tree/6060f0fbac1948d369ea28730845ea59db03f478/network%2Fwebsocket.md)[_{{{CITATION{{{_2{](https://github.com/watchping/vue-course/tree/6a60dc019287a13859793f1ec7fef84dc41aa2b9/temp.md)[_{{{CITATION{{{_3{](https://github.com/knoxie87/knoxie87.github.io/tree/792eba59dc34cdb2cfb9f9220acea5cb1736db35/views%2Fadmin%2Fadmin_dashboard.php)
+const fetchRequests = async () => {
+  // Fetch deposit requests
+  const depositRequests = [];
+  const q1 = query(collection(db, 'users'), where("depositRequest", "==", true));
+  const depositQuerySnapshot = await getDocs(q1);
+  depositQuerySnapshot.forEach((doc) => {
+    depositRequests.push({ id: doc.id, ...doc.data() });
+  });
+
+  // Fetch withdrawal requests
+  const withdrawalRequests = [];
+  const q2 = query(collection(db, 'users'), where("withdrawalRequest", "==", true));
+  const withdrawalQuerySnapshot = await getDocs(q2);
+  withdrawalQuerySnapshot.forEach((doc) => {
+    withdrawalRequests.push({ id: doc.id, ...doc.data() });
+  });
+
+  renderRequests(depositRequests, withdrawalRequests);
+};
+
+const renderRequests = (depositRequests, withdrawalRequests) => {
+  // Render deposit requests
+  const depositList = document.getElementById('deposit-requests');
+  depositList.innerHTML = '';
+  depositRequests.forEach((request) => {
+    const li = document.createElement('li');
+    li.innerText = `User: ${request.uid}, Amount: ${request.deposit}`;
+    depositList.appendChild(li);
+  });
+
+  // Render withdrawal requests
+  const withdrawalList = document.getElementById('withdrawal-requests');
+  withdrawalList.innerHTML = '';
+  withdrawalRequests.forEach((request) => {
+    const li = document.createElement('li');
+    li.innerText = `User: ${request.uid}, Amount: 25`;
+    withdrawalList.appendChild(li);
+  });
+};
+
+window.addEventListener('load', fetchRequests);
