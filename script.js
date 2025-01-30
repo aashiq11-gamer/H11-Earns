@@ -15,7 +15,7 @@ window.signUp = async () => {
     const user = userCredential.user;
     await addDoc(collection(db, 'users'), {
       uid: user.uid,
-      email: user.email, // Add email to Firestore
+      email: user.email,
       balance: 25,
       earnings: 0,
       deposit: 0,
@@ -61,10 +61,8 @@ async function showDashboard(user) {
       const userData = userDoc.data();
       document.getElementById("balance").innerText = userData.balance;
       document.getElementById("earnings").innerText = userData.earnings;
-      // ... any other updates to the user dashboard
     } else {
       console.error("User document not found!");
-      // Handle the case where the user document doesn't exist
     }
   } catch (error) {
     console.error("Error fetching user data:", error);
@@ -73,9 +71,22 @@ async function showDashboard(user) {
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    showDashboard(user);
+    // Check if user is admin
+    if (user.email === 'njavaa77@gmail.com') {
+      showAdminDashboard();
+    } else {
+      showDashboard(user);
+    }
   } else {
     document.getElementById("user-dashboard").style.display = "none";
     document.getElementById("auth-form").style.display = "block";
   }
 });
+
+function showAdminDashboard() {
+  document.getElementById("auth-form").style.display = "none";
+  document.getElementById("user-dashboard").style.display = "block";
+  // ... (Add admin-specific dashboard elements here)
+}
+
+// ... (Add other features here - deposit, withdraw, etc.)
