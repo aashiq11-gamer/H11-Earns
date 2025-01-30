@@ -29,3 +29,8 @@ button:hover {
 #user-dashboard {
   display: none;
 }
+
+hr {
+  margin: 20px 0;
+  border: 1px solid #ddd;
+}
