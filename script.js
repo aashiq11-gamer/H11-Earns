@@ -11,7 +11,11 @@ const auth = getAuth(app);
 onAuthStateChanged(auth, user => {
   if (user) {
     console.log("User is signed in:", user);
-    showDashboard();
+    if (user.email === 'admin@example.com') { // Check if the logged-in user is admin
+      window.location.href = 'admin-dashboard.html'; // Redirect to admin dashboard
+    } else {
+      showDashboard();
+    }
   } else {
     console.log("User is signed out");
     document.getElementById("user-dashboard").style.display = "none";
@@ -27,7 +31,11 @@ window.signUp = () => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       console.log("User signed up:", userCredential.user);
-      showDashboard();
+      if (userCredential.user.email === 'admin@example.com') {
+        window.location.href = 'admin-dashboard.html';
+      } else {
+        showDashboard();
+      }
     })
     .catch((error) => {
       console.error("Error signing up:", error);
@@ -43,7 +51,11 @@ window.logIn = () => {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       console.log("User logged in:", userCredential.user);
-      showDashboard();
+      if (userCredential.user.email === 'admin@example.com') {
+        window.location.href = 'admin-dashboard.html';
+      } else {
+        showDashboard();
+      }
     })
     .catch((error) => {
       console.error("Error logging in:", error);
