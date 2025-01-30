@@ -1,20 +1,27 @@
-window.deposit = async (amount) => {
-  const user = auth.currentUser;
-  if (user && amount >= 100) {
-    const q = query(collection(db, 'users'), where("uid", "==", user.uid));
-    const querySnapshot = await getDocs(q);
-    let docId = '';
-    querySnapshot.forEach((doc) => {
-      docId = doc.id;
-    });
+import { getFirestore, doc, increment, getDoc } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
+import { firebaseConfig } from '../firebase-config.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
 
-    await updateDoc(doc(db, 'users', docId), {
-      deposit: amount,
-      balance: amount // Update the balance with the deposit amount
-    });
-    alert('Deposit successful');
-    showDashboard(user);
-  } else {
-    alert('Minimum deposit amount is 100 PKR');
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+export async function deposit(userId) {
+  const amount = parseFloat(prompt('Enter deposit amount:'));
+
+  if (isNaN(amount) || amount < 100) {
+    alert('Invalid deposit amount. Minimum is 100.');
+    return;
   }
-};
+
+  try {
+    const userRef = doc(db, 'users', userId);
+    await updateDoc(userRef, { balance: increment(amount), deposit: amount });
+    alert('Deposit successful.');
+    const userDoc = await getDoc(userRef);
+    const userData = userDoc.data();
+    document.getElementById("balance").innerText = userData.balance;
+  } catch (error) {
+    console.error('Error depositing:', error);
+    alert('Deposit failed.');
+  }
+}
