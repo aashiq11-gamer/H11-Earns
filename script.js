@@ -1,27 +1,30 @@
 import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
 
-// Firestore reference
-const userDocRef = doc(db, 'users', user.uid);  // 'users' collection mein user document reference
+const db = getFirestore(app);  // Firestore initialization
+const userDocRef = doc(db, 'users', user.uid);  // User document reference
 
-// Document ko fetch karte hain
-const docSnap = await getDoc(userDocRef);
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    console.log("User is logged in:", user.uid);  // Debugging: Check user uid
+    const docSnap = await getDoc(userDocRef);
 
-if (!docSnap.exists()) {
-  console.error("User document not found!");  // Agar document nahi milta
+    if (!docSnap.exists()) {
+      console.error("User document not found!");  // Debugging: Error when document doesn't exist
 
-  // Document create kar rahe hain agar missing ho
-  try {
-    await setDoc(userDocRef, {
-      name: user.displayName || "User Name",  // Agar displayName available ho toh use karein
-      email: user.email,  // User ka email
-      // Aap aur fields bhi add kar sakte hain jaise balance, registration date, etc.
-    });
-    console.log("User document successfully created!");  // Document create hone ke baad
-  } catch (error) {
-    console.error("Error creating document:", error);  // Agar document create karte waqt koi error aaye
+      try {
+        await setDoc(userDocRef, {
+          name: user.displayName || "User Name",  // Setting default values
+          email: user.email,
+        });
+        console.log("User document successfully created!");
+      } catch (error) {
+        console.error("Error creating document:", error);
+      }
+    } else {
+      console.log("User document fetched:", docSnap.data());
+      showDashboard(user);  // Show the user's dashboard
+    }
+  } else {
+    console.log("No user is logged in.");
   }
-} else {
-  // Agar document mil gaya, toh usse process karein
-  console.log("User document fetched successfully:", docSnap.data());
-  showDashboard(user);  // User ka dashboard show karte hain
-}
+});
