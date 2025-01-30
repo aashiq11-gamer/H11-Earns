@@ -1,13 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>H11 Earns</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H11 Earns</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Welcome to H11 Earns</h1>
+    <h1>Welcome to H11 Earns</h1>
 
-  <!-- Sign Up / Log In Form -->
-  <div id="[_{{{CITATION{{{_1{](https://github.com/metleeha/TIL/tree/8172abefab1f9d33790cd923b5eb4e9831c6dc92/2019%2FSSAFY-1%2FWeb%2F190502_Vue.js_3.md)[_{{{CITATION{{{_2{](https://github.com/watchping/vue-course/tree/6a60dc019287a13859793f1ec7fef84dc41aa2b9/temp.md)
+    <div id="auth-form">  <h2>Sign Up</h2>
+        <form id="signup-form">
+            <input type="email" id="email" placeholder="Email">
+            <input type="password" id="password" placeholder="Password">
+            <button type="button" onclick="signUp()">Sign Up</button>
+        </form>
+
+        <h2>Log In</h2>
+        <form id="login-form">
+            <input type="email" id="login-email" placeholder="Email">
+            <input type="password" id="login-password" placeholder="Password">
+            <button type="button" onclick="logIn()">Log In</button>
+        </form>
+    </div>
+
+    <div id="user-dashboard" style="display: none;">
+        <h2>User Dashboard</h2>
+        <p>Welcome, <span id="user-name"></span>!</p>
+        <button onclick="logOut()">Log Out</button>
+    </div>
+
+    <script src="script.js"></script> </body>
+</html>
