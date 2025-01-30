@@ -2,6 +2,20 @@
 const app = firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
+// Listen for auth state changes
+auth.onAuthStateChanged(user => {
+  if (user) {
+    // User is signed in
+    console.log("User is signed in:", user);
+    showDashboard();
+  } else {
+    // User is signed out
+    console.log("User is signed out");
+    document.getElementById("user-dashboard").style.display = "none";
+    document.getElementById("auth-form").style.display = "block";
+  }
+});
+
 // Sign Up Function
 const signUp = () => {
   const email = document.getElementById('email').value;
@@ -11,10 +25,12 @@ const signUp = () => {
     .then((userCredential) => {
       // Successfully Signed Up
       console.log("User signed up:", userCredential.user);
+      // After sign up, you can show the dashboard immediately or do some other task
       showDashboard();
     })
     .catch((error) => {
       console.error("Error signing up:", error);
+      alert(error.message);  // To show error message
     });
 };
 
@@ -31,6 +47,7 @@ const logIn = () => {
     })
     .catch((error) => {
       console.error("Error logging in:", error);
+      alert(error.message);  // To show error message
     });
 };
 
