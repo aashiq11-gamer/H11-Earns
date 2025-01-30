@@ -34,6 +34,8 @@ window.signUp = () => {
       if (userCredential.user.email === 'admin@example.com') {
         window.location.href = 'admin-dashboard.html';
       } else {
+        // Give signup bonus of 25 PKR
+        addBonus(userCredential.user.uid, 25);
         showDashboard();
       }
     })
@@ -80,4 +82,10 @@ window.logOut = () => {
 const showDashboard = () => {
   document.getElementById("auth-form").style.display = "none";
   document.getElementById("user-dashboard").style.display = "block";
+};
+
+// Add bonus to user account
+const addBonus = (userId, amount) => {
+  // Add bonus logic, e.g., update user's balance in the database
+  console.log(`Added ${amount} PKR bonus to user ${userId}`);
 };
