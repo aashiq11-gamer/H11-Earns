@@ -1,19 +1,3 @@
-// Firebase Initialization
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    databaseURL: "YOUR_DATABASE_URL",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID",
-    measurementId: "YOUR_MEASUREMENT_ID"
-};
-
-const app = firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
-
 // UI Elements
 const googleSignInBtn = document.getElementById('google-sign-in');
 const depositBtn = document.getElementById('deposit-btn');
@@ -37,10 +21,8 @@ function checkUserStatus(userID) {
     userRef.once('value').then(snapshot => {
         const userData = snapshot.val();
         if (userData && userData.isAdmin) {
-            // Show Admin Actions
             document.getElementById('admin-actions').style.display = 'block';
         } else {
-            // Show User Actions
             document.getElementById('game-actions').style.display = 'block';
         }
         document.getElementById('auth-container').style.display = 'none';
@@ -49,8 +31,12 @@ function checkUserStatus(userID) {
 
 // Deposit Function
 depositBtn.addEventListener('click', () => {
+    if (!auth.currentUser) {
+        alert("Please sign in first.");
+        return;
+    }
     const userID = auth.currentUser.uid;
-    const depositAmount = 100; // example amount
+    const depositAmount = 100;
     const depositRef = db.ref('depositRequests').push();
     depositRef.set({
         userID: userID,
@@ -63,8 +49,12 @@ depositBtn.addEventListener('click', () => {
 
 // Withdraw Function
 withdrawBtn.addEventListener('click', () => {
+    if (!auth.currentUser) {
+        alert("Please sign in first.");
+        return;
+    }
     const userID = auth.currentUser.uid;
-    const withdrawAmount = 50; // example amount
+    const withdrawAmount = 50;
     const withdrawRef = db.ref('withdrawRequests').push();
     withdrawRef.set({
         userID: userID,
@@ -78,31 +68,38 @@ withdrawBtn.addEventListener('click', () => {
 
 // Approve Deposit Function (Admin only)
 approveDepositBtn.addEventListener('click', () => {
-    const depositRequestID = 'requestID1'; // example ID
+    const depositRequestID = prompt("Enter Deposit Request ID:");
+    if (!depositRequestID) return;
+
     const depositRef = db.ref('depositRequests/' + depositRequestID);
-    depositRef.update({ status: 'approved' }).then(() => {
-        const requestData = depositRef.val();
+    depositRef.once('value').then(snapshot => {
+        if (!snapshot.exists()) {
+            alert("Invalid Deposit Request ID");
+            return;
+        }
+        
+        const requestData = snapshot.val();
         const userID = requestData.userID;
         const depositAmount = requestData.amount;
-        
-        // Update user balance
-        const userRef = db.ref('users/' + userID);
-        userRef.once('value').then(userSnapshot => {
-            const userData = userSnapshot.val();
-            const newBalance = userData.balance + depositAmount;
-            userRef.update({ balance: newBalance });
 
-            // Log Transaction (Deposit)
-            const transactionRef = db.ref('transactions').push();
-            transactionRef.set({
-                userID: userID,
-                type: 'deposit',
-                amount: depositAmount,
-                status: 'approved',
-                date: new Date().toISOString()
+        depositRef.update({ status: 'approved' }).then(() => {
+            const userRef = db.ref('users/' + userID);
+            userRef.once('value').then(userSnapshot => {
+                const userData = userSnapshot.val();
+                const newBalance = (userData?.balance || 0) + depositAmount;
+                userRef.update({ balance: newBalance });
+
+                const transactionRef = db.ref('transactions').push();
+                transactionRef.set({
+                    userID: userID,
+                    type: 'deposit',
+                    amount: depositAmount,
+                    status: 'approved',
+                    date: new Date().toISOString()
+                });
+
+                alert('Deposit approved!');
             });
-
-            alert('Deposit approved!');
         });
     });
 });
