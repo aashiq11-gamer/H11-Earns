@@ -2,6 +2,8 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js';
 import { getFirestore, collection, addDoc, updateDoc, doc, getDocs, query, where, increment, getDoc } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
 import { firebaseConfig } from './firebase-config.js';
+import * as deposit from './features/deposit.js';
+import * as viewAd from './features/viewAd.js';
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -59,8 +61,22 @@ async function showDashboard(user) {
     const userDoc = await getDoc(doc(db, 'users', user.uid));
     if (userDoc.exists()) {
       const userData = userDoc.data();
+      document.getElementById("user-name").innerText = userData.email;
       document.getElementById("balance").innerText = userData.balance;
       document.getElementById("earnings").innerText = userData.earnings;
+
+      const featuresDiv = document.getElementById('features');
+      featuresDiv.innerHTML = '';
+
+      const depositButton = document.createElement('button');
+      depositButton.textContent = 'Deposit';
+      depositButton.onclick = () => deposit.deposit(user.uid);
+      featuresDiv.appendChild(depositButton);
+
+      const viewAdButton = document.createElement('button');
+      viewAdButton.textContent = 'View Ad';
+      viewAdButton.onclick = () => viewAd.viewAd(user.uid);
+      featuresDiv.appendChild(viewAdButton);
     } else {
       console.error("User document not found!");
     }
@@ -68,6 +84,7 @@ async function showDashboard(user) {
     console.error("Error fetching user data:", error);
   }
 }
+
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
