@@ -2,6 +2,19 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js';
 
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBaqypWY8YWiT5fvse-lllrkhUSpYR1JQ8",
+  authDomain: "h11-earnings.firebaseapp.com",
+  databaseURL: "https://h11-earnings-default-rtdb.firebaseio.com",
+  projectId: "h11-earnings",
+  storageBucket: "h11-earnings.firebasestorage.app",
+  messagingSenderId: "362605369321",
+  appId: "1:362605369321:web:4d8e34c1eb11ec35c11d78",
+  measurementId: "G-71115BPVKN"
+};
+
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
