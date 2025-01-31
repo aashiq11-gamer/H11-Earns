@@ -1,33 +1,24 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Firebase Authentication</title>
-  <script type="module" src="script.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H11 Earns</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Welcome to the Dashboard</h1>
-  
-  <!-- Sign Up Form -->
-  <h2>Sign Up</h2>
-  <input type="email" id="email" placeholder="Email" required />
-  <input type="password" id="password" placeholder="Password" required />
-  <button onclick="signUp()">Sign Up</button>
 
-  <!-- Log In Form -->
-  <h2>Log In</h2>
-  <input type="email" id="email" placeholder="Email" required />
-  <input type="password" id="password" placeholder="Password" required />
-  <button onclick="logIn()">Log In</button>
+    <!-- Your HTML code here -->
 
-  <!-- Dashboard (will be populated with user data) -->
-  <div id="dashboard">
-    <h3>User Details:</h3>
-    <p id="username"></p>
-    <p id="earnings"></p>
-    <p id="balance"></p>
-    <button onclick="logOut()">Log Out</button>
-  </div>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/signup.js"></script>
+    <script src="js/login.js"></script>
+    <script src="js/user-profile.js"></script>
+    <script src="js/deposit.js"></script>
+    <script src="js/withdrawal.js"></script>
+    <script src="js/referral.js"></script>
+    <script src="js/adView.js"></script>
+    <script src="js/admin.js"></script>
 </body>
 </html>
