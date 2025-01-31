@@ -1,27 +1,16 @@
-import { getFirestore, doc, increment, getDoc } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
-import { firebaseConfig } from '../firebase-config.js';
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
+// Deposit function (deposit.js)
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "./firebase-config";
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-export async function deposit(userId) {
-  const amount = parseFloat(prompt('Enter deposit amount:'));
-
-  if (isNaN(amount) || amount < 100) {
-    alert('Invalid deposit amount. Minimum is 100.');
-    return;
-  }
-
+const depositMoney = async (userId, amount) => {
   try {
-    const userRef = doc(db, 'users', userId);
-    await updateDoc(userRef, { balance: increment(amount), deposit: amount });
-    alert('Deposit successful.');
-    const userDoc = await getDoc(userRef);
-    const userData = userDoc.data();
-    document.getElementById("balance").innerText = userData.balance;
+    const depositData = {
+      amount: amount,
+      timestamp: new Date(),
+    };
+    await setDoc(doc(db, "deposits", userId), depositData);
+    console.log("Deposit successful.");
   } catch (error) {
-    console.error('Error depositing:', error);
-    alert('Deposit failed.');
+    console.error("Error making deposit:", error.message);
   }
-}
+};
