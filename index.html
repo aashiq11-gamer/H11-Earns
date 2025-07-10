@@ -1,24 +1,78 @@
-<!-- index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>H11 Earns</title>
-    <link rel="stylesheet" href="style.css">
+  <title>Hotspot Manager Web</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; text-align: center; background: #f4f4f4; }
+    #qrcode { margin-top: 10px; }
+    .device { padding: 10px; border: 1px solid #ccc; margin: 10px; }
+    button { margin: 5px; padding: 10px 20px; }
+  </style>
 </head>
 <body>
 
-    <!-- Your HTML code here -->
+<h2>📡 Hotspot Controller</h2>
+<button onclick="toggleHotspot()">🔘 Toggle Hotspot</button>
+<button onclick="generatePassword()">🔐 Generate Password</button>
 
-    <script src="js/firebase-config.js"></script>
-    <script src="js/signup.js"></script>
-    <script src="js/login.js"></script>
-    <script src="js/user-profile.js"></script>
-    <script src="js/deposit.js"></script>
-    <script src="js/withdrawal.js"></script>
-    <script src="js/referral.js"></script>
-    <script src="js/adView.js"></script>
-    <script src="js/admin.js"></script>
+<h3>Current Password:</h3>
+<p id="password">[Not Set]</p>
+
+<div id="qrcode"></div>
+
+<h3>Connected Devices</h3>
+<div id="devices"></div>
+
+<script>
+let hotspotOn = false;
+let password = "";
+
+function toggleHotspot() {
+  hotspotOn = !hotspotOn;
+  alert(hotspotOn ? "Hotspot ON" : "Hotspot OFF");
+}
+
+function generatePassword() {
+  password = Math.random().toString(36).slice(-10) + "!@";
+  document.getElementById("password").innerText = password;
+
+  const wifiQR = `WIFI:T:WPA;S:MySecureHotspot;P:${password};;`;
+  document.getElementById("qrcode").innerHTML = "";
+  new QRCode(document.getElementById("qrcode"), wifiQR);
+}
+
+// Mock device list
+let devices = [
+  { ip: "192.168.43.101", name: "Device A" },
+  { ip: "192.168.43.102", name: "Device B" }
+];
+
+function renderDevices() {
+  const container = document.getElementById("devices");
+  container.innerHTML = "";
+  devices.forEach((device, index) => {
+    const div = document.createElement("div");
+    div.className = "device";
+    div.innerHTML = `
+      <b>${device.name}</b> (${device.ip})<br/>
+      <button onclick="approve(${index})">✅ Approve</button>
+      <button onclick="block(${index})">❌ Block</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function approve(index) {
+  alert(`Approved: ${devices[index].ip}`);
+}
+
+function block(index) {
+  alert(`Blocked: ${devices[index].ip}`);
+}
+
+renderDevices();
+</script>
+
 </body>
 </html>
